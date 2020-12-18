@@ -74,9 +74,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.commodityPrice_wish_cart.setText(String.valueOf(cartLinkedList.get(position).getProductPrice()));
         Glide.with(mContext).load(cartLinkedList.get(position).getProductImageUrl()).into(holder.productImage);
 
-        items[position] = cartLinkedList.get(position).getNumberOfItems();
+        try {
+            items[position] = cartLinkedList.get(position).getNumberOfItems();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         holder.numberCart.setText(String.valueOf(cartLinkedList.get(position).getNumberOfItems()));
+
         holder.minus.setOnClickListener(v -> {
             holder.minus.setImageTintList(ColorStateList.valueOf(Color.RED));
             int current = cartLinkedList.get(position).getNumberOfItems();
@@ -97,7 +102,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     }
                 }
             });*/
-            items[position] = current;
+           // items[position] = current;
             holder.numberCart.setText(current);
             new Handler().postDelayed(() -> holder.minus.setImageTintList(ColorStateList.valueOf(Color.BLACK)), 300);
             notifyDataSetChanged();
@@ -107,7 +112,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             int current = cartLinkedList.get(position).getNumberOfItems();
             current++;
             holder.numberCart.setText(current);
-            items[position] = current;
+          //  items[position] = current;
             /*DatabaseReference db = FirebaseDatabase.getInstance().getReference();
             db.child(CART).child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).child(cartLinkedList.get(position).getProductId()).child(NO_OF_ITEMS).setValue(current + 1).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -153,13 +158,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView commodityName_wish_cart, commodityPrice_wish_cart;
-        EditText numberCart;
+        TextView commodityName_wish_cart, commodityPrice_wish_cart, numberCart;
         ImageView productImage;
         ImageButton minus, add, delete;
 
         ViewHolder(View itemView) {
             super(itemView);
+
             commodityName_wish_cart = itemView.findViewById(R.id.commodityName_wish_cart);
             commodityPrice_wish_cart = itemView.findViewById(R.id.commodityPrice_wish_cart);
             numberCart = itemView.findViewById(R.id.numberCart);
@@ -181,7 +186,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         this.mClickListener = itemClickListener;
     }
 
-    public int[] getItems(){
+    public int[] getItems() {
         return items;
     }
 
